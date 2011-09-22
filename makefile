@@ -1,11 +1,20 @@
-all: square slow-square
+all: square test
 
-square: square.c
-	clang -O2 square.c -o square
+OBJS = square.o main.o test.o
 
-slow-square: square.c
-	clang square.c -o slow-square
+$(OBJS): %.o: %.c
+	clang -O2 -c $*.c
 
-time: square slow-square
+square: square.o main.o
+	clang -O2 square.o main.o -o square
+
+test: square.o test.o
+	clang -O2 square.o test.o -o test
+
+time: square
 	time ./square
-	time ./slow-square
+
+clean:
+	rm -f *.o
+	rm -f square
+	rm -f test
