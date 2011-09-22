@@ -154,6 +154,7 @@ void solve_latin_square(latin_square* square, bool verbose) {
     unsigned charpos = 0; 
     unsigned tries = 0;
     int i;
+    srand(clock());
     while (!square_complete(square)) {
         if (verbose) putchar('\r');
         randomize_char(square, charpos, working_row);     
