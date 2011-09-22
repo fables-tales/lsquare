@@ -1,0 +1,4 @@
+*.o
+square
+slow-square
+test
