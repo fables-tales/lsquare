@@ -5,13 +5,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include <assert.h>
-
-
-typedef struct _latin_square {
-    unsigned width;
-    char* grid;  
-    char* alphabet;
-} latin_square;
+#include "square.h"
 
 const unsigned buffer_size = 1024;
 
@@ -144,17 +138,6 @@ bool square_complete(latin_square* square) {
     }
 
     return true;
-}
-
-void solve_latin_square(latin_square* square);
-
-
-int main() {
-    test();
-    latin_square* my_square = malloc(sizeof(latin_square));
-    init_latin_square("abcdefghijlkmnopqrstuvwxyz", my_square);
-    solve_latin_square(my_square);
-    return 0;
 }
 
 void reset_row(unsigned row, latin_square* square) {
