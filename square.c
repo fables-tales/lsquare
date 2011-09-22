@@ -159,10 +159,15 @@ void solve_latin_square(latin_square* square, bool verbose) {
     unsigned charpos = 0; 
     unsigned tries = 0;
     int i;
+    //seed the random number generator so we get different squares each time
     srand(clock());
     while (!square_complete(square)) {
+        //reset the last printed line
         if (verbose) putchar('\r');
+
+        //set the current char at charpos to a random one from the alphabet
         randomize_char(square, charpos, working_row);     
+        //print the current row
         if (verbose) {
             char* row_ptr = square->grid + working_row * square->width;
             for (i = 0; i < square->width; i++) {
@@ -171,6 +176,8 @@ void solve_latin_square(latin_square* square, bool verbose) {
             }
             fflush(stdout);
         }
+
+        //if the row is valid move to the next row
         if (row_is_valid(working_row, square) && col_is_valid(charpos, square)) {
            tries = 0; 
 
@@ -182,7 +189,7 @@ void solve_latin_square(latin_square* square, bool verbose) {
                    fflush(stdout);
                }
            }
-
+        //if we've tried lots of different values reset the whole row
         } else if (tries++ >= 100) {
             reset_row(working_row, square);
             charpos = 0;
