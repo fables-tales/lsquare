@@ -149,28 +149,32 @@ void randomize_char(latin_square* square, unsigned x, unsigned y) {
     square->grid[y * square->width + x] = square->alphabet[rand() % square->width];
 }
 
-void solve_latin_square(latin_square* square) {
+void solve_latin_square(latin_square* square, bool verbose) {
     unsigned working_row = 0;
     unsigned charpos = 0; 
     unsigned tries = 0;
     int i;
     while (!square_complete(square)) {
-        putchar('\r');
+        if (verbose) putchar('\r');
         randomize_char(square, charpos, working_row);     
-        char* row_ptr = square->grid + working_row * square->width;
-        for (i = 0; i < square->width; i++) {
-            putchar(row_ptr[i]);
-            putchar(' ');
+        if (verbose) {
+            char* row_ptr = square->grid + working_row * square->width;
+            for (i = 0; i < square->width; i++) {
+                putchar(row_ptr[i]);
+                putchar(' ');
+            }
+            fflush(stdout);
         }
-        fflush(stdout);
         if (row_is_valid(working_row, square) && col_is_valid(charpos, square)) {
            tries = 0; 
 
            if (++charpos == square->width) {
                charpos = 0;
                working_row += 1;
-               putchar('\n');
-               fflush(stdout);
+               if (verbose) {
+                   putchar('\n');
+                   fflush(stdout);
+               }
            }
 
         } else if (tries++ >= 100) {
