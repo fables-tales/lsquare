@@ -75,6 +75,10 @@ void test() {
     init_latin_square("ab", my_square_2);
     my_square_2->grid = "abba";
     assert(square_complete(my_square_2));
+
+    init_latin_square("abcd", my_square_2);
+    solve_latin_square(my_square_2, false);
+    assert(square_complete(my_square_2));
 }
 
 int main() {
