@@ -9,6 +9,8 @@
 
 const unsigned buffer_size = 1024;
 
+const char placeholder_char = '.'; 
+
 char* read_file(char* filename) {
     char* buffer = (char*)(malloc(sizeof(char) * buffer_size));
     unsigned buf_len = buffer_size;
@@ -39,7 +41,10 @@ void strip(char* string) {
 void init_latin_square(char* alphabet, latin_square* square) {
     square->width = strlen(alphabet);
     square->grid = malloc(sizeof(char) * square->width * square->width);
-    memset(square->grid, '.', square->width * square->width);
+    //fill the grid with placeholder characters, this is used in other tests
+    //to check whether the grid is full of real characters
+    memset(square->grid, placeholder_char, square->width * square->width);
+    
     square->alphabet = alphabet;
 }
 
@@ -51,7 +56,7 @@ bool row_is_filled(unsigned row, latin_square* square) {
     char* row_ptr = square->grid + row * square->width;
     int i;
     for (i = 0; i < square->width; i++) {
-        if (row_ptr[i] == '.') return false;
+        if (row_ptr[i] == placeholder_char) return false;
     }
 
     return true;
@@ -61,7 +66,7 @@ bool col_is_filled(unsigned col, latin_square* square) {
     int i;
     for (i = 0; i < square->width; i++) {
         char* row_ptr = square->grid + i * square->width;
-        if (row_ptr[col] == '.') return false;
+        if (row_ptr[col] == placeholder_char) return false;
     }
 
     return true;
@@ -73,10 +78,10 @@ bool row_is_valid(unsigned row, latin_square* square) {
     char c_char1, c_char2;
     for (c_count1 = 0; c_count1 < square->width; c_count1++) {
         c_char1 = row_ptr[c_count1];
-        if (c_char1 != '.') {
+        if (c_char1 != placeholder_char) {
             for (c_count2 = 0; c_count2 < square->width; c_count2++) {
                 c_char2 = row_ptr[c_count2];
-                if (c_char2 != '.' && c_count1 != c_count2 && c_char1 == c_char2) {
+                if (c_char2 != placeholder_char && c_count1 != c_count2 && c_char1 == c_char2) {
                     return false;
                 }
 
@@ -96,12 +101,12 @@ bool col_is_valid(unsigned col, latin_square* square) {
     for (r_count1 = 0; r_count1 < square->width; r_count1++) {
         r_char1 = get_char_at(square, col, r_count1);
 
-        if (r_char1 != '.') {
+        if (r_char1 != placeholder_char) {
 
             for (r_count2 = 0; r_count2 < square->width; r_count2++) {
                 r_char2 = get_char_at(square, col, r_count2);
 
-                if (r_char2 != '.' && r_count1 != r_count2 && r_char1 == r_char2) return false;
+                if (r_char2 != placeholder_char && r_count1 != r_count2 && r_char1 == r_char2) return false;
             }
 
         }
@@ -142,7 +147,7 @@ bool square_complete(latin_square* square) {
 
 void reset_row(unsigned row, latin_square* square) {
     char* row_ptr = square->grid + row * square->width;
-    memset(row_ptr, '.', square->width);
+    memset(row_ptr, placeholder_char, square->width);
 }
 
 void randomize_char(latin_square* square, unsigned x, unsigned y) {
