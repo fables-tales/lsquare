@@ -15,7 +15,7 @@ void print_latin_square(latin_square*);
 
 bool square_complete(latin_square*);
 
-void solve_latin_square(latin_square*);
+void solve_latin_square(latin_square*, bool);
 
 bool col_is_filled(unsigned, latin_square*);
 
