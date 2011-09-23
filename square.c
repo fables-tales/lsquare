@@ -143,12 +143,12 @@ bool square_complete(latin_square* square) {
     return true;
 }
 
-void reset_row(unsigned row, latin_square* square) {
+static void reset_row(unsigned row, latin_square* square) {
     char* row_ptr = square->grid + row * square->width;
     memset(row_ptr, placeholder_char, square->width);
 }
 
-void randomize_char(latin_square* square, unsigned x, unsigned y) {
+static void randomize_char(latin_square* square, unsigned x, unsigned y) {
     square->grid[y * square->width + x] = square->alphabet[rand() % square->width];
 }
 
