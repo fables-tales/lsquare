@@ -131,8 +131,6 @@ void print_latin_square(latin_square* square) {
     }
 }
 
-void test();
-
 bool square_complete(latin_square* square) {
     int i;
     for (i = 0; i < square->width; i++) {
