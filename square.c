@@ -48,6 +48,7 @@ void init_latin_square(char* alphabet, latin_square* square) {
     square->alphabet = alphabet;
 }
 
+//static because it can be inlined
 static char get_char_at(latin_square* square, unsigned x, unsigned y) {
     return square->grid[x + (square->width * y)];
 }
@@ -143,6 +144,7 @@ bool square_complete(latin_square* square) {
     return true;
 }
 
+//static so they can be inlined
 static void reset_row(unsigned row, latin_square* square) {
     char* row_ptr = square->grid + row * square->width;
     memset(row_ptr, placeholder_char, square->width);
