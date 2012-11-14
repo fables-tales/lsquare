@@ -204,9 +204,10 @@ void solve_latin_square(latin_square* square, bool verbose) {
                }
            }
         //if we've tried lots of different values reset the whole row
-        } else if (tries++ >= 100) {
-            reset_row(working_row, square);
-            charpos = 0;
+        } else if (tries++ >= 128) {
+            //if (charpos < seekback) {
+                reset_row(working_row, square);
+                charpos = 0;
             //} else {
             //    unsigned k;
             //    for (k = 0; k < seekback; k++) {

@@ -8,17 +8,19 @@
 int main(int argc, const char* argv[]) {
     char* alphabet;
 
+    bool verbose = false;
     if (argc == 2 && strcmp(argv[1], "-v") != 0) {
         alphabet = (char*) argv[1];
     } else if (argc == 3) {
         alphabet = (char*) argv[2];
+        verbose = true;
     } else {
         alphabet = (char*) "abcdefghijklmnopqrstuvwxyz";
     }
 
-    alphabet = "abcdefghijklmnopqrstuvwxyz";
+//    char* alphabet = "abcdefghijklmnopqrstuvwxyz@";
+//    bool verbose = false;
 
-    bool verbose = false;
 
     latin_square* my_square = malloc(sizeof(latin_square));
     init_latin_square(alphabet, my_square);
