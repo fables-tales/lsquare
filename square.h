@@ -6,6 +6,7 @@
 typedef struct _latin_square {
     unsigned width;
     char* grid;  
+    char* orig_grid;
     char* alphabet;
 } latin_square;
 

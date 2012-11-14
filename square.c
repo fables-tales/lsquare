@@ -9,7 +9,7 @@
 
 const unsigned buffer_size = 1024;
 
-const char placeholder_char = '.'; 
+const char placeholder_char = '.';
 
 char* read_file(char* filename) {
     char* buffer = (char*)(malloc(sizeof(char) * buffer_size));
@@ -41,11 +41,19 @@ void strip(char* string) {
 void init_latin_square(char* alphabet, latin_square* square) {
     square->width = strlen(alphabet);
     square->grid = malloc(sizeof(char) * square->width * square->width);
+    square->orig_grid = malloc(sizeof(char) * square->width * square->width);
     //fill the grid with placeholder characters, this is used in other tests
     //to check whether the grid is full of real characters
     memset(square->grid, placeholder_char, square->width * square->width);
-    
+    memset(square->orig_grid, placeholder_char, square->width * square->width);
     square->alphabet = alphabet;
+}
+
+
+void take_string_descriptor(char* string, latin_square* square) {
+    int i;
+    memcpy(square->grid, string, square->width * square->width);
+    memcpy(square->orig_grid, string, square->width * square->width);
 }
 
 //static because it can be inlined
@@ -147,7 +155,7 @@ bool square_complete(latin_square* square) {
 //static so they can be inlined
 static void reset_row(unsigned row, latin_square* square) {
     char* row_ptr = square->grid + row * square->width;
-    memset(row_ptr, placeholder_char, square->width);
+    memset(row_ptr, '.', square->width);
 }
 
 static void randomize_char(latin_square* square, unsigned x, unsigned y) {
@@ -156,17 +164,20 @@ static void randomize_char(latin_square* square, unsigned x, unsigned y) {
 
 void solve_latin_square(latin_square* square, bool verbose) {
     unsigned working_row = 0;
-    unsigned charpos = 0; 
+    unsigned charpos = 0;
     unsigned tries = 0;
+    unsigned row_tries = 0;
+    unsigned seekback = 1;
     int i;
     //seed the random number generator so we get different squares each time
     srand(clock());
     while (!square_complete(square)) {
         //reset the last printed line
-        if (verbose) putchar('\r');
-
+        if (verbose) {
+            putchar('\r');
+        }
         //set the current char at charpos to a random one from the alphabet
-        randomize_char(square, charpos, working_row);     
+        randomize_char(square, charpos, working_row);
         //print the current row
         if (verbose) {
             char* row_ptr = square->grid + working_row * square->width;
@@ -177,13 +188,16 @@ void solve_latin_square(latin_square* square, bool verbose) {
             fflush(stdout);
         }
 
+        row_tries++;
         //if the row is valid move to the next row
         if (row_is_valid(working_row, square) && col_is_valid(charpos, square)) {
-           tries = 0; 
+           tries = 0;
 
            if (++charpos == square->width) {
                charpos = 0;
                working_row += 1;
+               seekback = 1;
+               row_tries = 0;
                if (verbose) {
                    putchar('\n');
                    fflush(stdout);
@@ -193,6 +207,24 @@ void solve_latin_square(latin_square* square, bool verbose) {
         } else if (tries++ >= 100) {
             reset_row(working_row, square);
             charpos = 0;
+            //} else {
+            //    unsigned k;
+            //    for (k = 0; k < seekback; k++) {
+            //        square->grid[charpos-k + working_row * square->width] = '.';
+            //    }
+            //    charpos -= seekback;
+            //    seekback += 1;
+            //}
+        }
+
+        if (row_tries > (1 << 24)) {
+            printf("resetting grid!\n");
+            printf("------------------------------------------------\n");
+            working_row = 0;
+            charpos = 0;
+            tries = 0;
+            row_tries = 0;
+            memcpy(square->grid, square->orig_grid, square->width * square->width);
         }
     }
 }
