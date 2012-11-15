@@ -2,7 +2,9 @@
 #include <string.h>
 #include <time.h>
 #include <stdio.h>
+#ifdef profile
 #include <google/profiler.h>
+#endif
 #include "square.h"
 
 int main(int argc, const char* argv[]) {
